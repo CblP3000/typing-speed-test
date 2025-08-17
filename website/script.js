@@ -171,60 +171,63 @@ class TextToLine {
         this.lines = new Array();
         this.re = {
             chunk: /[^\s-]+?-\b|\S+|\s+|\r\n?|\n/g,
-            ansiEscapeSequence: /\u001b.*?m/g
         }
-        
 
         Object.assign(this, {
-            indexLine: 0,
-            widthSymbol: 200,
-        }, options);   
+            width: 200,
+        }, options);
+        
+        this.initSpanElement();
     }
 
-    updateLines(text) { 
-        const words = text.match(this.re.chunk) || [];
-        let line = new Array();
-        let lineCount = 0;
+    updateLines(text) {
+        const chunk = text.match(this.re.chunk) || [];
+        let startOfLine = 0;
+        let endOfLine = 0;  
+        let lineLength = 0;
         let wordLength = 0;
 
-        for (let i = 0; i < words.length; i++) {
-            words[i] = words[i].trim();
-            if (words[i] === '') continue;
+        const savingLine = ()=> this.lines.push(chunk.slice(startOfLine, endOfLine).join('').trim());
 
-            wordLength = this.replaceAnsi(words[i]).length + 1;
-            lineCount += wordLength;
-            
-            if (lineCount - 1 <= this.widthSymbol) {
-                line.push(words[i]); // adding word
-            } else {
-                this.lines.push(line.join(' ')); // saving line
-                line = new Array(); // remove data
-                // saving new word
-                line.push(words[i]);
-                lineCount = wordLength;
+        for (; endOfLine < chunk.length; endOfLine++) {
+            wordLength = chunk[endOfLine].length;
+            // wordLength = this.getWidth(chunk[endOfLine]);
+            lineLength += wordLength;
+            if (lineLength > this.width) { 
+                savingLine(); // saving line
+                // reset value
+                startOfLine = endOfLine;
+                lineLength = wordLength;
             }
         }     
-        if (lineCount) this.lines.push(line.join(' ')); // saving last line
+        if (lineLength) savingLine(); // saving last line
     }
 
     wrap(text, options) {
         const textToLine = new TextToLine(options);
         textToLine.updateLines(text);
-        return this.lines.join(`\n`);
+        return textToLine.lines.join(`\n`);
     }
 
-    getWitch(text, fontFamily = 'inherit', fontSize = 'inherid') {
+    
+
+    // пока ни как не использую
+    getWidth(text, fontFamily = 'inherid', fontSize = 'inherid') {
+        this.span.style.fontFamily = fontFamily;
+        this.span.style.fontSize = fontSize;
+        this.span.textContent = text;
+        return this.span.offsetWidth;
+    }
+
+    initSpanElement() {
+        const id = "span-element-for-get-width";
+        this.span = document.getElementById(id);
         if (!this.span) {
             this.span = document.createElement('span');
+            this.span.id = id;
+            this.span.style = `visibility: hidden; position: absolute; white-space: pre;`;
             document.body.append(this.span);
         }
-        this.span.style = `display: none; fontfamily: ${fontFamily}; fontsize: ${fontSize};`;
-        this.span.textContent = text;
-        return this.span.clientWidth;
-    }
-
-    replaceAnsi(string) {
-        return string.replace(this.re.ansiEscapeSequence, '');
     }
 }
 
@@ -285,7 +288,7 @@ class Test {
     TextToLine() {
         const theClass = new TextToLine()
         const text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
-        const result = theClass.wrap(text, { widthSymbol: 20 }); 
+        const result = theClass.wrap(text, { width: 20 }); 
         const outputData = `Lorem ipsum dolor\nsit amet,\nconsectetur\nadipiscing elit, sed\ndo eiusmod tempor\nincididunt ut labore\net dolore magna\naliqua.`;
         console.log(result);
         return result === outputData;
@@ -320,5 +323,4 @@ var getText = new GetText();
 var textToLine = new TextToLine();
 
 var test = new Test();
-
-console.log(test.TextToLine());
+console.log("result test 'TextToLine':", test.TextToLine());
