@@ -228,23 +228,24 @@ class TextToLine {
             this.span.style = `visibility: hidden; position: absolute; white-space: pre;`;
             document.body.append(this.span);
         }
+        this.span.textContent = ``;
     }
 }
 
 // подбор и хронения текста.
 class Text2 {
     constructor() {
-        this.puths = [''];
-        this.indexPuth = 0;
+        this.paths = [''];
+        this.indexPath = 0;
         this.source = 'text/';
         this.text = '';
     }
 
     async getText() {
-        if (this.indexPuth < this.puths.length) {
-            const response = await fetch(this.source + this.puths[this.indexPuth++]);
+        if (this.indexPath < this.paths.length) {
+            const response = await fetch(this.source + this.paths[this.indexPath++]);
             if (response.ok) {
-                return this.text = response.text()
+                return this.text = await response.text()
             } else {
                 return '';
             }
@@ -254,18 +255,11 @@ class Text2 {
     }
 
     async getText2() {
-        if (this.indexPuth < this.puths.length) {
-            return fetch(this.source + this.puths[this.indexPuth])
-            .then(response=>{
-                if (response.ok) {
-                    return this.text = response.text()
-                } else {
-                    return '';
-                }
-            });
-        } else {
-            return '';
-        }
+        return this.indexPath < this.paths.length? 
+            fetch(this.source + this.paths[this.indexPath++])
+                .then(response=>response.ok ? response.text().then(e=>this.text=e) : '')
+                .catch(console.error) 
+            : '';
     }
 }
 
