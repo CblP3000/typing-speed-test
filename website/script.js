@@ -56,7 +56,9 @@ class UpperText {
             entered: document,     // Element for correct text
             erroneous: document,   // Element for incorrect input
             upcoming: document,    // Element for remaining text
+            rest: document,
             line: obj.upcoming?.textContent || '', // Expected line of text
+            getLine: ()=>["Lorem", "ipsum", "dolor", "sit", "amet"],
         }
 
         // Merge default and user-defined parameters
@@ -67,6 +69,11 @@ class UpperText {
         this.b = 0;                // Index of erroneous input
         this.timeoutId = null;     // Timer for delays
         this.isError = false;      // Error flag
+        this.lines = new Array();  // Array of row
+        this.indexLine = 0;        // index of the current row
+
+        // update lines 
+        this.switchLine();
     }
 
     // Update displayed text areas
@@ -96,6 +103,11 @@ class UpperText {
         if (char1 === char2 && !this.isError) {
             this.a = this.value.textContent.length;
             this.switchStatus(this.a, this.a);
+
+            // end line
+            if (this.value.textContent.length === this.line.length) {
+                this.switchLine(); 
+            } 
         } 
 
         // If the character is incorrect
@@ -125,13 +137,29 @@ class UpperText {
             this.isError = false;
         }, 200);
     }
+
+    // update row
+    updateText(lines) {
+        this.line = lines[0];
+        if (lines.length > 1) this.rest.innerHTML = lines.slice(1, lines.length).join("<br>");
+        this.reset();
+    }
+
+    async switchLine() {
+        // if end of text
+        if (this.lines.length-1 <= this.indexLine) {
+            this.lines = await this.getLine();
+        }
+        // update row
+        this.updateText(this.lines.slice(this.indexLine++, this.indexLine + 5));
+    }
 }
 
 // подбор и хронения текста.
 class GetText {
     constructor() {
-        this.puths = ["file_1.txt","file_2.txt","file_3.txt","file_4.txt","file_5.txt","file_6.txt","file_7.txt","file_8.txt","file_9.txt"];
-        this.indexPuth = 0;
+        this.paths = ["file_2.txt","file_1.txt","file_3.txt","file_4.txt","file_5.txt","file_6.txt","file_7.txt","file_8.txt","file_9.txt"];
+        this.indexPath = 0;
         this.source = 'jokes/';
         this.texts = new Array(2);
         this.indexText = 0;
@@ -154,11 +182,11 @@ class GetText {
     }
 
     updateText = ()=> {
-        if (this.indexPuth < this.puths.length) {
-            this.promise = fetch(this.source + this.puths[this.indexPuth++])
+        if (this.indexPath < this.paths.length) {
+            this.promise = fetch(this.source + this.paths[this.indexPath++])
             .then(e=>e.text()) // response to text
             .then(text => {
-                this.indexText = this.indexText > 0 ? 0 : 1; // switching the index
+                this.indexText = this.indexText === 1 ? 0 : 1; // switching the index
                 this.texts[this.indexText] = text; // saving the new text
             })
             .catch(console.error);
@@ -180,20 +208,20 @@ class TextToLine {
         this.initSpanElement();
     }
 
-    updateLines(text) {
-        const chunk = text.match(this.re.chunk) || [];
+    updateLines(text) { 
+        const chunks = text.match(this.re.chunk) || [];
         let startOfLine = 0;
         let endOfLine = 0;  
         let lineLength = 0;
         let wordLength = 0;
 
-        const savingLine = ()=> this.lines.push(chunk.slice(startOfLine, endOfLine).join('').trim());
+        const savingLine = ()=> this.lines.push(chunks.slice(startOfLine, endOfLine).join('').trim());
 
-        for (; endOfLine < chunk.length; endOfLine++) {
-            wordLength = chunk[endOfLine].length;
+        for (; endOfLine < chunks.length; endOfLine++) {
+            wordLength = chunks[endOfLine].length;
             // wordLength = this.getWidth(chunk[endOfLine]);
             lineLength += wordLength;
-            if (lineLength > this.width) { 
+            if (lineLength > this.width || chunks[endOfLine] === `\n`) { 
                 savingLine(); // saving line
                 // reset value
                 startOfLine = endOfLine;
@@ -201,6 +229,7 @@ class TextToLine {
             }
         }     
         if (lineLength) savingLine(); // saving last line
+        return this.lines;
     }
 
     wrap(text, options) {
@@ -276,13 +305,23 @@ class Statistics {
 
 class Test {
     constructor() {
-        
+        // console.log("result test 'GetText':", this.GetText());   
+        // console.log("result test 'TextToLine':", this.TextToLine());
     }
 
     TextToLine() {
         const theClass = new TextToLine()
         const text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
         const result = theClass.wrap(text, { width: 20 }); 
+        const outputData = `Lorem ipsum dolor\nsit amet,\nconsectetur\nadipiscing elit, sed\ndo eiusmod tempor\nincididunt ut labore\net dolore magna\naliqua.`;
+        console.log(result);
+        return result === outputData;
+    }
+
+    TextToLine2() {
+        const theClass = new TextToLine({width: 20})
+        const text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+        const result = theClass.updateLines(text); 
         const outputData = `Lorem ipsum dolor\nsit amet,\nconsectetur\nadipiscing elit, sed\ndo eiusmod tempor\nincididunt ut labore\net dolore magna\naliqua.`;
         console.log(result);
         return result === outputData;
@@ -296,25 +335,54 @@ class Test {
         console.log(result);
         return result === outputData;
     }
+
+    async GetText() {
+        const theClass = new GetText();
+        const text = `Скромная девушка приглашает парня в гости на чай. Он приходит с двумя бутылками коньяка. Она:
+– Я же тебя на чай приглашала!
+Он:
+– Ну это… Ты сказала сама, что к чаю… это, где оно тут…
+Вытаскивает из кармана замученную ириску:
+– Вот! Конфеты с коньяком!`;
+        await theClass.getText();
+        const result = await theClass.getText();
+        console.log(theClass.texts)
+        console.log(result);
+        return text === result;
+    }
 }
 
+const elements = { 
+    value: document.querySelector('#input-value'),
+    entered: document.querySelector('#entered-text'),
+    erroneous: document.querySelector('#erroneous-text'),
+    upcoming: document.querySelector('#upcoming-text'),
+    rest: document.querySelector('#rest-text'),
+    cursor: document.querySelector('#input-cursor'),
+}
+
+var statistics = new Statistics();
+var getText = new GetText();
+var textToLine = new TextToLine({width: 20}); 
 
 var upper_text = new UpperText({
     value: document.querySelector('#input-value'),
     entered: document.querySelector('#entered-text'),
     erroneous: document.querySelector('#erroneous-text'),
     upcoming: document.querySelector('#upcoming-text'),
+    rest: document.querySelector('#rest-text'),
+    getLine: ()=>getText.getText().then(e=>textToLine.updateLines(e)),
     // line: 'value this for test'
 });
 
 var input = new Input({
     value: document.querySelector('#input-value'),
     cursor: document.querySelector('#input-cursor'),
-    oninput: e=>upper_text.update(e)
+    oninput: e=>{
+        upper_text.update(e);
+    }
 });
 
-var getText = new GetText();
-var textToLine = new TextToLine();
+// console.log(textToLine.lines);
 
 var test = new Test();
-console.log("result test 'TextToLine':", test.TextToLine());
