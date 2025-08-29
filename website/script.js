@@ -1,5 +1,5 @@
 var settings = {
-    isAutoBackspace: true,
+    isAutoBackspace: false,
 }
 
 // класс оброботки нажатий
@@ -30,7 +30,7 @@ class Input {
             // if it's not a regular key then exit
             else if (event.ctrlKey || event.altKey || event.metaKey || event.key.length !== 1) return;
             // the whitespace
-            else if (event.key === '') this.value.textContent += '\u00A0'; 
+            else if (event.key === ' ') this.value.textContent += '\u00A0'; 
             // adding symbol
             else this.value.textContent += event.key;
             // removeing the twinkle class
@@ -56,9 +56,9 @@ class UpperText {
             entered: document,     // Element for correct text
             erroneous: document,   // Element for incorrect input
             upcoming: document,    // Element for remaining text
-            rest: document,
+            rest: document,        // Element for rest text 
             line: obj.upcoming?.textContent || '', // Expected line of text
-            getLine: ()=>["Lorem", "ipsum", "dolor", "sit", "amet"],
+            getLine: ()=>["Lorem", "ipsum", "dolor", "sit", "amet"],    
         }
 
         // Merge default and user-defined parameters
@@ -68,9 +68,17 @@ class UpperText {
         this.a = 0;                // Index of correct input
         this.b = 0;                // Index of erroneous input
         this.timeoutId = null;     // Timer for delays
-        this.isError = false;      // Error flag
         this.lines = new Array();  // Array of row
         this.indexLine = 0;        // index of the current row
+        
+        // synonymous characters
+        this.synonym = {"\u00A0": " ", "\u2002": " ", "\u2003": " ", "\u2009": " ", "\u202F": " ", "ё": "е", "Ё": "Е", "—": "-", "–": "-", "−": "-", "―": "-", "á": "a", "é": "e", "í": "i", "ó": "o", "ú": "u", "ñ": "n", "ç": "c", "α": "a", "β": "b"};
+        // symbols to replace 
+        this.replaceSymbols = {" ":"\u00A0", "«": "\"", "»": "\"", "“": "\"", "”": "\"", "‘": "'", "’": "'", "×": "x", "÷": "/", "±": "+-", "∞": "inf", "π": "pi", "…": "...", "¡": "!", "¿": "?", "•": "*", "°": "deg", "№": "No", "©": "(c)", "®": "(r)", "™": "(tm)"};
+        // regular regrowth
+        this.re = {
+            replaceSymbols: new RegExp(Object.keys(this.replaceSymbols).join("|"), "g")
+        }
 
         // update lines 
         this.switchLine();
@@ -87,71 +95,73 @@ class UpperText {
     }
     
     // Update input status
-    update() {        
+    update() { 
+        const len = this.value.textContent.length; 
+
         // Reset if no input
-        if (this.value.textContent === '') {
+        if (len === 0) {
             this.reset(); 
             return;
         }
 
-        const index = Math.max(this.value.textContent.length - 1, 0)
-        const char1 = this.value.textContent.at(index);
-        const char2 = this.line.at(index);
+        const toSynonym = char=>char in this.synonym ? this.synonym[char] : char;
+        const char1 = toSynonym(this.value.textContent.at(len - 1));
+        const char2 = toSynonym(this.line.at(len - 1));
 
 
         // If the character is correct
-        if (char1 === char2 && !this.isError) {
-            this.a = this.value.textContent.length;
-            this.switchStatus(this.a, this.a);
-
+        if (char1 === char2 && this.a >= this.b) { // if it is correct and there is no zone with an error
+            this.switchStatus(len, len);
             // end line
-            if (this.value.textContent.length === this.line.length) {
-                this.switchLine(); 
-            } 
+            if (len === this.line.length) this.switchLine(); 
         } 
 
         // If the character is incorrect
         else { 
-            this.b = this.value.textContent.length;
-            this.switchStatus(this.a, this.b);
-    
+            this.switchStatus(this.a, len);
             if (settings.isAutoBackspace) this.autoBackspace(); 
-            else this.isError = this.a < this.b; // if you write more then you guessed, then you made a mistake.
         }
     }
 
     reset() {
         this.switchStatus(0, 0);
-        this.isError = false;
         if (this.timeoutId) clearTimeout(this.timeoutId);
         this.value.textContent = '';
     }
 
     autoBackspace() {
-        this.isError = true;
         if (this.timeoutId) clearTimeout(this.timeoutId);
         this.timeoutId = setTimeout(() => {
             this.switchStatus(this.a, this.a);  
             this.value.textContent = this.entered.textContent;
             this.timeoutId = null;
-            this.isError = false;
         }, 200);
     }
 
-    // update row
-    updateText(lines) {
-        this.line = lines[0];
-        if (lines.length > 1) this.rest.innerHTML = lines.slice(1, lines.length).join("<br>");
-        this.reset();
-    }
-
+    // switch the line
     async switchLine() {
         // if end of text
-        if (this.lines.length-1 <= this.indexLine) {
+        if (this.lines.length <= this.indexLine) {
             this.lines = await this.getLine();
+            this.indexLine = 0;
         }
         // update row
-        this.updateText(this.lines.slice(this.indexLine++, this.indexLine + 5));
+        // update one line
+        this.line = this.lines[this.indexLine]
+            .replace(this.re.replaceSymbols, 
+                symbol=>this.replaceSymbols[symbol]
+            );
+
+        // if there are more lines
+        if (this.lines.length > this.indexLine + 1) { 
+            this.rest.innerHTML = this.lines
+                .slice(this.indexLine + 1, this.indexLine + 5)
+                .join("<br>");
+        } else this.rest.innerHTML = ``;
+        // reset text area
+        this.reset();
+        // switch the current row
+        this.indexLine++;
     }
 }
 
@@ -215,6 +225,7 @@ class TextToLine {
         let lineLength = 0;
         let wordLength = 0;
 
+        this.lines = new Array();
         const savingLine = ()=> this.lines.push(chunks.slice(startOfLine, endOfLine).join('').trim());
 
         for (; endOfLine < chunks.length; endOfLine++) {
@@ -261,45 +272,47 @@ class TextToLine {
     }
 }
 
-// подбор и хронения текста.
-class Text2 {
-    constructor() {
-        this.paths = [''];
-        this.indexPath = 0;
-        this.source = 'text/';
-        this.text = '';
-    }
-
-    async getText() {
-        if (this.indexPath < this.paths.length) {
-            const response = await fetch(this.source + this.paths[this.indexPath++]);
-            if (response.ok) {
-                return this.text = await response.text()
-            } else {
-                return '';
-            }
-        } else {
-            return '';
-        }
-    }
-
-    async getText2() {
-        return this.indexPath < this.paths.length? 
-            fetch(this.source + this.paths[this.indexPath++])
-                .then(response=>response.ok ? response.text().then(e=>this.text=e) : '')
-                .catch(console.error) 
-            : '';
-    }
-}
-
-
 // сохраняет и выводит статистику.
 class Statistics {
+    constructor(options) {
+        Object.assign(this, {
+            speedValue: document,
+        }, options);
+
+        this.reset();
+    }
+
     // добовления и обновления результатов статистики.
     // line - строка. error - количество ошибок. time - время написания в мс.
     add(line, error, time) { 
         // the plug
         console.log(`speed: ${line.length/time*60000}`); 
+    }
+
+    start() {
+        console.log("start")
+        this.errorCount = 0;
+        this.entered = 0;
+        this.startTime = performance.now();
+    }
+
+    error() {
+        console.log("error")
+        this.errorCount++;
+    }
+
+    endLine(line) {
+        console.log("end line")
+        this.endTime = performance.now(); // time 
+        const difference = this.endTime - this.startTime;
+        this.speedValue.textContent = line.length / difference*60000;
+    }
+
+    reset() {
+        this.errorCount = 0;
+        this.entered = 0;
+        this.startTime = null;
+        this.endTime = null;
     }
 }
 
@@ -352,18 +365,13 @@ class Test {
     }
 }
 
-const elements = { 
-    value: document.querySelector('#input-value'),
-    entered: document.querySelector('#entered-text'),
-    erroneous: document.querySelector('#erroneous-text'),
-    upcoming: document.querySelector('#upcoming-text'),
-    rest: document.querySelector('#rest-text'),
-    cursor: document.querySelector('#input-cursor'),
-}
 
-var statistics = new Statistics();
+var statistics = new Statistics({
+    speedvalue: document.querySelector("#speed-value")
+});
+
 var getText = new GetText();
-var textToLine = new TextToLine({width: 20}); 
+var textToLine = new TextToLine({width: 50}); 
 
 var upper_text = new UpperText({
     value: document.querySelector('#input-value'),
@@ -371,7 +379,7 @@ var upper_text = new UpperText({
     erroneous: document.querySelector('#erroneous-text'),
     upcoming: document.querySelector('#upcoming-text'),
     rest: document.querySelector('#rest-text'),
-    getLine: ()=>getText.getText().then(e=>textToLine.updateLines(e)),
+    getLine: ()=>getText.getText().then(text=>textToLine.updateLines(text)),
     // line: 'value this for test'
 });
 
