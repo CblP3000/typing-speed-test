@@ -9,7 +9,7 @@ class GetText {
         this.promise = null;
 
         // this.text = ()=> this.texts[this.indexText];
-        // this.getText = url => fetch(url).then(e=>e.text(), console.error());
+        // this.getText = url => fetch(url).then(e=>e.text(), console.error);
         
         this.updateText();
     }
