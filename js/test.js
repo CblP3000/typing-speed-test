@@ -2,6 +2,7 @@ class Test {
     constructor() {
         // console.log("result test 'GetText':", this.GetText());   
         // console.log("result test 'TextToLine':", this.TextToLine());
+        // console.log("result test 'Statistics':", this.Statistics());
     }
 
     TextToLine() {
@@ -44,6 +45,21 @@ class Test {
         console.log(theClass.texts)
         console.log(result);
         return text === result;
+    }
+
+    async Statistics() {
+        const stats = new Statistics();
+        stats.start();           
+        stats.error();           
+        stats.error();           
+
+        const testLine = "12";
+
+        return new Promise((resolve)=>setTimeout(()=>{
+            stats.endLine(testLine)
+            const result = Number(elements.speedValue.textContent);
+            resolve(result > 58 || result < 62)
+        }, 2000));
     }
 }
 

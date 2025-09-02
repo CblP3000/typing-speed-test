@@ -43,6 +43,8 @@ class UpperText {
             return;
         }
 
+        if (this.a === 0) this.onStartTyping();
+
         const char1 = this.toSynonym(elements.value .textContent.at(len - 1));
         const char2 = this.toSynonym(this.line.at(len - 1));
 
@@ -51,14 +53,17 @@ class UpperText {
         if (char1 === char2 && this.a >= this.b) { // if it is correct and there is no zone with an error
             this.switchStatus(len, len);
             // end line
-            if (len === this.line.length) this.switchLine(); 
+            if (len === this.line.length) {
+                this.onEndLine(this.line);
+                this.switchLine();
+            } 
         } 
 
         // If the character is incorrect
         else { 
             this.switchStatus(this.a, len);
-            if (settings.isAutoBackspace) this.autoBackspace(); 
-            else if (this.a >= this.b) {}   // on error of manually
+            if (settings.isAutoBackspace) this.autoBackspace(this.onError); 
+            else if (this.a >= this.b) this.onError();   // on error of manually
         }
     }
 }
@@ -136,12 +141,13 @@ class AutoBackspace {
         this.reset = this.reset.bind(this);
     }
 
-    backspace() {
+    backspace(onClear = ()=>{}) {
         if (this.timeoutId) 
             clearTimeout(this.timeoutId);
         this.timeoutId = setTimeout(() => {
             upperText.switchStatus(upperText.a, upperText.a);  
             elements.value.textContent = elements.entered.textContent;
+            onClear();
             this.timeoutId = null;
         }, this.delay);
     }
@@ -164,4 +170,7 @@ var upperText = new UpperText({
     toSynonym: synonymCharacters.toSynonym,
     switchLine: switchLine.switch,
     autoBackspace: autoBackspace.backspace,
+    onStartTyping: statistics.start,
+    onError: statistics.error,
+    onEndLine: statistics.endLine
 });

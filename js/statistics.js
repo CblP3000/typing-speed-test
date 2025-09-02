@@ -2,36 +2,29 @@
 class Statistics {
     constructor(options) {
         Object.assign(this, {
-            speedValue: document,
         }, options);
+
+        this.start = this.start.bind(this);
+        this.error = this.error.bind(this);
+        this.endLine = this.endLine.bind(this);
 
         this.reset();
     }
 
-    // adding and updating statistics results.
-    // line - a string. error - the number of errors. time - writing time in ms.
-    add(line, error, time) { 
-        // the plug
-        console.log(`speed: ${line.length/time*60000}`); 
-    }
-
     start() {
-        console.log("start")
         this.errorCount = 0;
         this.entered = 0;
         this.startTime = performance.now();
     }
 
     error() {
-        console.log("error")
         this.errorCount++;
     }
 
     endLine(line) {
-        console.log("end line")
         this.endTime = performance.now(); // time 
         const difference = this.endTime - this.startTime;
-        this.speedValue.textContent = line.length / difference*60000;
+        this.add(line, this.errorCount, difference);
     }
 
     reset() {
@@ -40,8 +33,19 @@ class Statistics {
         this.startTime = null;
         this.endTime = null;
     }
+
+    // adding and updating statistics results.
+    // line - a string. error - the number of errors. time - writing time in ms.
+    add(line, error, time) { 
+        const speed = line.length/time*60000;
+        const errors = error / line.length * 100;
+
+        elements.speedValue.textContent = speed.toFixed(2);
+        elements.errorValue.textContent = errors.toFixed(2);
+    }
+
 }
 
 var statistics = new Statistics({
-    speedvalue: document.querySelector("#speed-value")
+    
 });

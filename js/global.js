@@ -1,5 +1,5 @@
 var settings = {
-    isAutoBackspace: true,
+    isAutoBackspace: false,
 }
 
 var elements = {
@@ -9,4 +9,6 @@ var elements = {
     upcoming: document.querySelector('#upcoming-text'),     // Element for remaining text
     rest: document.querySelector('#rest-text'),             // Element for rest text 
     cursor: document.querySelector('#input-cursor'),        // Element for text cursor 
+    speedValue: document.querySelector("#speed-value"),     // Element for speed in signs per minute
+    errorValue: document.querySelector('#errors-value'),     // Element for number of error in %
 }
