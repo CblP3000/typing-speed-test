@@ -48,15 +48,11 @@ input {
 }
 
 .twinkle {
-    animation: twinkle 1s infinite;
+    animation: twinkle 1s step-end infinite;
 }
 
 @keyframes twinkle {
-    0% { opacity: 1; }
-    25% { opacity: 1; }
-    50% { opacity: 0; }
-    75% { opacity: 1; }
-    100% { opacity: 1; }
+    50% { background: transparent;}
 }
 
 /* id */
@@ -84,4 +80,19 @@ input {
 
 #erroneous-text {
     color: #ff4444;
+}
+
+#input-cursor {
+    display: inline-block;
+    background: #ffffff;
+    width: 1px;
+    height: 1.2rem;
+}
+
+#span-element-for-get-width {
+    visibility: hidden; 
+    position: absolute; 
+    white-space: pre;
+    right: 9999px;
+    top: 9999px;
 }

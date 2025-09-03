@@ -11,7 +11,9 @@ class GetText {
         // this.text = ()=> this.texts[this.indexText];
         // this.getText = url => fetch(url).then(e=>e.text(), console.error);
         
-        this.updateText();
+        this.updateText(); // bind the context
+
+        this.getText = this.getText.bind(this)
     }
 
     async getText() {
@@ -47,8 +49,6 @@ class TextToLine {
         Object.assign(this, {
             width: 200,
         }, options);
-        
-        this.initSpanElement();
     }
 
     updateLines(text) { 
@@ -59,20 +59,24 @@ class TextToLine {
         let wordLength = 0;
 
         this.lines = new Array();
-        const savingLine = ()=> this.lines.push(chunks.slice(startOfLine, endOfLine).join('').trim());
+        const savingLine = ()=> this.lines.push(
+            chunks.slice(startOfLine, endOfLine)
+            .join('').trim()
+        );
 
         for (; endOfLine < chunks.length; endOfLine++) {
-            wordLength = chunks[endOfLine].length;
-            // wordLength = this.getWidth(chunk[endOfLine]);
+            // wordLength = chunks[endOfLine].length;
+            wordLength = this.getWidth(chunks[endOfLine]);
             lineLength += wordLength;
             if (lineLength > this.width || chunks[endOfLine] === `\n`) { 
                 savingLine(); // saving line
                 // reset value
                 startOfLine = endOfLine;
-                lineLength = wordLength;
+                lineLength = wordLength; 
             }
         }     
-        if (lineLength) savingLine(); // saving last line
+        if (lineLength > 0) 
+            savingLine(); // saving last line
         return this.lines;
     }
 
@@ -82,28 +86,11 @@ class TextToLine {
         return textToLine.lines.join(`\n`);
     }
 
-    
-
-    // пока ни как не использую
-    getWidth(text, fontFamily = 'inherid', fontSize = 'inherid') {
-        this.span.style.fontFamily = fontFamily;
-        this.span.style.fontSize = fontSize;
-        this.span.textContent = text;
-        return this.span.offsetWidth;
-    }
-
-    initSpanElement() {
-        const id = "span-element-for-get-width";
-        this.span = document.getElementById(id);
-        if (!this.span) {
-            this.span = document.createElement('span');
-            this.span.id = id;
-            this.span.style = `visibility: hidden; position: absolute; white-space: pre;`;
-            document.body.append(this.span);
-        }
-        this.span.textContent = ``;
+    getWidth(text) {
+        elements.spanElementForGetWidth.textContent = text;
+        return elements.spanElementForGetWidth.clientWidth;
     }
 }
 
-var getText = new GetText();
-var textToLine = new TextToLine({width: 50});
+const getText = new GetText();
+const textToLine = new TextToLine({width: 500});

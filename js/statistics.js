@@ -1,20 +1,17 @@
 // saves and outputs statistics.
 class Statistics {
-    constructor(options) {
-        Object.assign(this, {
-        }, options);
-
+    constructor() {
+        // bind the context 
         this.start = this.start.bind(this);
         this.error = this.error.bind(this);
         this.endLine = this.endLine.bind(this);
-
+        // intial value
         this.reset();
     }
 
     start() {
-        this.errorCount = 0;
-        this.entered = 0;
-        this.startTime = performance.now();
+        this.reset();
+        this.startTime = performance.now(); 
     }
 
     error() {
@@ -22,7 +19,7 @@ class Statistics {
     }
 
     endLine(line) {
-        this.endTime = performance.now(); // time 
+        this.endTime = performance.now();
         const difference = this.endTime - this.startTime;
         this.add(line, this.errorCount, difference);
     }
@@ -37,15 +34,12 @@ class Statistics {
     // adding and updating statistics results.
     // line - a string. error - the number of errors. time - writing time in ms.
     add(line, error, time) { 
-        const speed = line.length/time*60000;
-        const errors = error / line.length * 100;
+        const speed = line.length / time * 60000;   // speed characters per minute
+        const errors = error / line.length * 100;   // percentage of errors
 
         elements.speedValue.textContent = speed.toFixed(2);
         elements.errorValue.textContent = errors.toFixed(2);
     }
-
 }
 
-var statistics = new Statistics({
-    
-});
+const statistics = new Statistics();

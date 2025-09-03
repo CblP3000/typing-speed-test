@@ -63,4 +63,4 @@ class Test {
     }
 }
 
-var test = new Test();
+const test = new Test();

@@ -3,7 +3,7 @@ class Input {
     constructor(obj) {
         var defaultObj = {
             twinkleClass: 'twinkle',
-            oninput: event => {}     // the handler is triggered after each line change.
+            onInput: event => {}     // the handler is triggered after each line change.
         };
         Object.assign(this, defaultObj, obj);
 
@@ -16,32 +16,35 @@ class Input {
             // ctrl + backspace
             if (event.ctrlKey && event.key === 'Backspace') {
                 const index = elements.value.textContent.lastIndexOf('\u00A0');
-                elements.value.textContent = index === -1 ? '' : elements.value.textContent.slice(0, index);
+                elements.value.textContent = elements.value.textContent.slice(0, Math.max(index, 0));
             }
             // backspace
-            else if (event.key === 'Backspace') elements.value .textContent = elements.value .textContent.slice(0, -1);
+            else if (event.key === 'Backspace') elements.value.textContent = elements.value .textContent.slice(0, -1);
             // if it's not a regular key then exit
             else if (event.ctrlKey || event.altKey || event.metaKey || event.key.length !== 1) return;
             // the whitespace
-            else if (event.key === ' ') elements.value .textContent += '\u00A0'; 
+            else if (event.key === ' ') elements.value.textContent += '\u00A0'; 
             // adding symbol
-            else elements.value .textContent += event.key;
-            // removeing the twinkle class
-            elements.cursor.classList.remove(this.twinkleClass);
-            // adding the twinkle class after 200ms
-            if (this.timeoutId) clearTimeout(this.timeoutId);
-            this.timeoutId = setTimeout(()=> {
-                elements.cursor.classList.add(this.twinkleClass);
-                this.timeoutId = null;
-            }, 200 );
+            else elements.value.textContent += event.key;
+            // focus on cursor 
+            this.focusCursor();
             // this handler
-            this.oninput(event);
+            this.onInput(event);
         });
+    }
+
+    focusCursor() {
+        // removeing the twinkle class
+        elements.cursor.classList.remove(this.twinkleClass);
+        // adding the twinkle class after 200ms
+        if (this.timeoutId) clearTimeout(this.timeoutId);
+        this.timeoutId = setTimeout(()=> {
+            elements.cursor.classList.add(this.twinkleClass);
+            this.timeoutId = null;
+        }, 200 );
     }
 }
 
-var input = new Input({
-    oninput: e=>{
-        upperText.update(e);
-    }
+const input = new Input({
+    onInput: upperText.update
 });
