@@ -3,7 +3,7 @@ class GetText {
     constructor() {
         this.paths = ["file_2.txt","file_1.txt","file_3.txt","file_4.txt","file_5.txt","file_6.txt","file_7.txt","file_8.txt","file_9.txt"];
         this.indexPath = 0;
-        this.source = '../text/';
+        this.source = './text/';
         this.texts = new Array(2);
         this.indexText = 0;
         this.promise = null;
