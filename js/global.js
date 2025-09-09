@@ -23,6 +23,7 @@ const packageOfTexts = {
         "en": 0,
         "ru": 1815
     },
+    
     setLang(index=0) {
         if (index < 0 || index >= this.langs.length) {
             console.warn('Incorrect language index');

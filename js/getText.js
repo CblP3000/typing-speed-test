@@ -48,11 +48,9 @@ class TextPath {
     }
 
     get() {
-        this.indexPath =    
-            this.indexPath+1 <= packageOfTexts.getLength()?
-            this.indexPath+1 : 1;
+        this.indexPath = (this.indexPath + 1) % packageOfTexts.getLength();
         localStorage.setItem(this.key, this.indexPath);
-        return this.source + this.indexPath + ".txt";
+        return this.source + (this.indexPath + 1) + ".txt";
     }
 }
 
