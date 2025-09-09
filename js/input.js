@@ -1,4 +1,3 @@
-// click processing class
 class TextInput {
     constructor() {
         this.update = this.update.bind(this);
