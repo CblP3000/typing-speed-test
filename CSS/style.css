@@ -44,7 +44,7 @@ input {
 
 .input-element {
     display: flex;
-    width: 500px;
+    min-width: 500px;
 }
 
 .twinkle {

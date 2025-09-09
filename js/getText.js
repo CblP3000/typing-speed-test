@@ -41,7 +41,7 @@ class TextPath {
         this.key = "index_path";
         this.indexPath = parseInt(
             localStorage.getItem(this.key)
-        ) || 1;
+        ) || 0;
         this.source = `text/${packageOfTexts.getLang()}/`;
 
         this.get = this.get.bind(this);
