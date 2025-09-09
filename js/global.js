@@ -15,3 +15,25 @@ const elements = {
     errorValue: $('#errors-value'),    // Element for number of error in %
     spanElementForGetWidth: $("#span-element-for-get-width"),
 }
+
+const packageOfTexts = {
+    langs: ['en', 'ru'],
+    lang: 'ru',
+    lengths: {
+        "en": 0,
+        "ru": 1815
+    },
+    setLang(index=0) {
+        if (index < 0 || index >= this.langs.length) {
+            console.warn('Incorrect language index');
+            return;
+        }
+        this.lang = this.langs[index];
+    },
+    getLang() {
+        return this.lang;
+    },
+    getLength() {
+        return this.lengths[this.lang]
+    }
+};
