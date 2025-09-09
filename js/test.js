@@ -64,7 +64,7 @@ class Test {
     }
 
     testText() {
-        getPath.indexPath = getPath.indexPath - 2;
+        getPath.indexPath -= 2;
         upperText.switchLine = ()=>{
             upperText.line = "test"; 
             upperText.reset(); 

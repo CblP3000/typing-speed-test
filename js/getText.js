@@ -107,6 +107,6 @@ class TextToLine {
     }
 }
 
-const getPath = new TextPath();
-const getText = new GetText({getPath: getPath.get});
+const textPath = new TextPath();
+const getText = new GetText({getPath: textPath.get});
 const textToLine = new TextToLine({width: 500});
