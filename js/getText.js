@@ -1,9 +1,8 @@
 // подбор и хронения текста.
 class GetText {
-    constructor() {
-        this.paths = ["file_2.txt","file_1.txt","file_3.txt","file_4.txt","file_5.txt","file_6.txt","file_7.txt","file_8.txt","file_9.txt"];
-        this.indexPath = 0;
-        this.source = './text/';
+    constructor({getPath}) {
+        this.getPath = getPath;
+
         this.texts = new Array(2);
         this.indexText = 0;
         this.promise = null;
@@ -27,15 +26,33 @@ class GetText {
     }
 
     updateText = ()=> {
-        if (this.indexPath < this.paths.length) {
-            this.promise = fetch(this.source + this.paths[this.indexPath++])
-            .then(e=>e.text()) // response to text
-            .then(text => {
-                this.indexText = this.indexText === 1 ? 0 : 1; // switching the index
-                this.texts[this.indexText] = text; // saving the new text
-            })
-            .catch(console.error);
-        }
+        this.promise = fetch(this.getPath())
+        .then(e=>e.text()) // response to text
+        .then(text => {
+            this.indexText = this.indexText === 1 ? 0 : 1; // switching the index
+            this.texts[this.indexText] = text; // saving the new text
+        })
+        .catch(console.error);
+    }
+}
+
+class TextPath {
+    constructor() {
+        this.key = "index_path";
+        this.indexPath = parseInt(
+            localStorage.getItem(this.key)
+        ) || 0;
+        this.source = `text/${packageOfTexts.getLang()}/`;
+
+        this.get = this.get.bind(this);
+    }
+
+    get() {
+        this.indexPath =    
+            this.indexPath+1 <= packageOfTexts.getLength()?
+            this.indexPath+1 : 1;
+        localStorage.setItem(this.key, this.indexPath);
+        return this.source + this.indexPath + ".txt";
     }
 }
 
@@ -92,5 +109,6 @@ class TextToLine {
     }
 }
 
-const getText = new GetText();
+const getPath = new TextPath();
+const getText = new GetText({getPath: getPath.get});
 const textToLine = new TextToLine({width: 500});
