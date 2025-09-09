@@ -65,12 +65,12 @@ class Test {
 
     testText() {
         getPath.indexPath -= 2;
-        upperText.switchLine = ()=>{
-            upperText.line = "test"; 
-            upperText.reset(); 
+        inputStatus.switchLine = ()=>{
+            inputStatus.line = "test"; 
+            inputStatus.reset(); 
             //elements.value.textContent = "tes";
         }
-        setTimeout(()=>upperText.switchLine(), 100)
+        setTimeout(()=>inputStatus.switchLine(), 100)
     }
 }
 

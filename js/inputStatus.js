@@ -1,5 +1,5 @@
 // input text control class
-class UpperText {
+class InputStatus {
     constructor(options) {
         // Merge default and user-defined parameters
         Object.assign(this, {
@@ -97,7 +97,7 @@ class SwitchLine {
             this.indexLine = 0;
         }
         // update row
-        upperText.line = this.replaceSynonym(this.lines[this.indexLine]); // update one line
+        inputStatus.line = this.replaceSynonym(this.lines[this.indexLine]); // update one line
 
         // if there are more lines
         if (this.lines.length > this.indexLine + 1) { 
@@ -106,7 +106,7 @@ class SwitchLine {
                 .join("<br>");
         } else elements.rest.innerHTML = ``;
         // reset text area
-        upperText.reset();
+        inputStatus.reset();
         // switch the current row
         this.indexLine++;
     }
@@ -155,7 +155,7 @@ class AutoBackspace {
     backspace(onClear = ()=>{}) {
         this.reset();
         this.timeoutId = setTimeout(() => {
-            upperText.switchStatus(upperText.a, upperText.a); // remove the error zone
+            inputStatus.switchStatus(inputStatus.a, inputStatus.a); // remove the error zone
             elements.value.textContent = elements.entered.textContent; // remove an error in the text area
             onClear(); // handler
             this.timeoutId = null; // clear timeout id
@@ -170,7 +170,7 @@ const switchLine = new SwitchLine({
 });
 const autoBackspace = new AutoBackspace();
 
-const upperText = new UpperText({
+const inputStatus = new InputStatus({
     optionalReset: autoBackspace.reset,
     toSynonym: synonymCharacters.toSynonym,
     switchLine: switchLine.switch,

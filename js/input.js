@@ -53,5 +53,5 @@ document.addEventListener('keydown', (event) => {
     // text input update
     textInput.update(event);
     // Update input status
-    upperText.update(event);
+    inputStatus.update(event);
 });
