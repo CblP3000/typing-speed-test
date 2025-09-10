@@ -44,8 +44,11 @@ class Statistics {
         this.speeds.push(speed);
         this.errors.push(errors);
 
-        elements.speedValue.textContent = speed.toFixed(0) +' / '+ this.speeds.average().toFixed(0);
-        elements.errorValue.textContent = errors.toFixed(0) +' / '+ this.errors.average().toFixed(0);    
+        elements.speedValue.textContent = speed.toFixed(0);
+        elements.errorValue.textContent = errors.toFixed(0);   
+        
+        elements.averageSpeedValue.textContent = this.speeds.average().toFixed(0);
+        elements.averageErrorValue.textContent = this.errors.average().toFixed(0); 
     }
 }
 

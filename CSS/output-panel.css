@@ -1,0 +1,36 @@
+#output-panel {
+    position: absolute;
+    top: 2%;
+    right: 2%;
+
+    height: var(--OP-height);
+
+    border: 2px solid var(--dark-bg-color);
+    border-radius: 10px;
+    background-color: var(--panel-bg-color);
+    box-shadow: -2px 2px var(--dark-bg-color);
+
+    font-size: 20px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.icon-OP {
+    height: 60px;
+    margin: 0 15px;
+}
+
+.container-OP {
+    line-height: 1.4    ;
+    margin-right: 15px;
+}
+
+.name-OP, .partition-OP, .unit-OP {
+    color: var(--gray-color);
+}
+
+.unit-OP {
+    font-size: 15px;
+}

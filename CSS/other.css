@@ -1,0 +1,7 @@
+#span-element-for-get-width {
+    visibility: hidden; 
+    position: absolute; 
+    white-space: pre;
+    right: 9999px;
+    top: 9999px;
+}

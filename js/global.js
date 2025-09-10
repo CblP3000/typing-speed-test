@@ -13,6 +13,8 @@ const elements = {
     cursor: $('#input-cursor'),        // Element for text cursor 
     speedValue: $("#speed-value"),     // Element for speed in signs per minute
     errorValue: $('#errors-value'),    // Element for number of error in %
+    averageSpeedValue: $("#average-speed-value"),
+    averageErrorValue: $("#average-errors-value"),
     spanElementForGetWidth: $("#span-element-for-get-width"),
 }
 

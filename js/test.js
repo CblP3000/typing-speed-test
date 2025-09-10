@@ -64,7 +64,7 @@ class Test {
     }
 
     testText() {
-        getPath.indexPath -= 2;
+        textPath.indexPath -= 2;
         inputStatus.switchLine = ()=>{
             inputStatus.line = "test"; 
             inputStatus.reset(); 

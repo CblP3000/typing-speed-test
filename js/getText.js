@@ -1,7 +1,9 @@
 // подбор и хронения текста.
 class GetText {
-    constructor({getPath}) {
-        this.getPath = getPath;
+    constructor(options) {
+        Object.assign(this, {
+            getPath: ()=>"getPath/is/not/defined"
+        }, options);
 
         this.texts = new Array(2);
         this.indexText = 0;

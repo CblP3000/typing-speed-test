@@ -4,31 +4,50 @@
         <title>speed typing test</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="CSS/style.css">
+        <div>
+            <link rel="stylesheet" href="CSS/global.css">
+            <link rel="stylesheet" href="CSS/output-panel.css">
+            <link rel="stylesheet" href="CSS/typing-test.css">
+            <link rel="stylesheet" href="CSS/other.css">
+        </div>
     </head>
     <body class="container">
-        <div id="top-panel" class="container"> 
-            <div class="top-panel-item">speed:&nbsp;
-                <span id="speed-value">--&nbsp/&nbsp--</span>
-                <span class="unit">&nbspcpm</span>
-            </div> 
-            <div class="top-panel-item">errors:&nbsp;
-                <span id="errors-value">--&nbsp/&nbsp--</span>
-                <span class="unit">&nbsp%</span>
-            </div> 
+        <div id="output-panel">
+            <img src="assets/speed_icon.opt.svg" alt=":(" class="icon-OP">
+            <div class="container-OP">
+                <snap class="name-OP">speed:</snap>
+                <br>
+                <span id="speed-value">--</span>
+                <span class="unit-OP">cpm</span>
+                <span class="partition-OP">|</span>
+                <span id="average-speed-value">--</span>
+                <span class="unit-OP">cpm</span>
+            </div>
+            <img src="assets/alert_icon.opt.svg" alt=":(" class="icon-OP">
+            <div class="container-OP">
+                <snap class="name-OP">errors:</snap>
+                <br>
+                <span id="errors-value">--</span>
+                <span class="unit-OP">%</span>
+                <span class="partition-OP">|</span>
+                 <span id="average-errors-value">--</span>
+                 <span class="unit-OP">%</span>
+            </div>
         </div>
-        <div id="content">
-            <div id="input" class="input-element text">
+
+        <div id="typing-test">
+            <div id="input-field" class="element-TT">
                 <span id="input-value"></span>
                 <div id="input-cursor" class="twinkle"></div>
             </div>
-            <div id="upper-text" class="input-element text">
+            <div id="upper-text" class="element-TT">
                 <span id="entered-text"></span>
                 <span id="erroneous-text"></span>
-                <span id="upcoming-text">text loading...</span>
+                <span id="upcoming-text">text&nbsploading...</span>
             </div>
-            <div id="rest-text" class="input-element text">please wait for the text to load, it usually happens pretty quickly.</div>
+            <div id="rest-text" class="element-TT">please wait for the text to load, it usually happens pretty quickly.</div>
         </div>
+
         <span id="span-element-for-get-width"></span>
         <div>
             <script src="js/global.js"></script>
