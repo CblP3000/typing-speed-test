@@ -21,12 +21,11 @@ class TextInput {
 }
 
 class FocusCursor {
-    constructor({
-        twinkleClass = 'twinkle', 
-        delay = 200
-    }) {
-        this.twinkleClass = twinkleClass;
-        this.delay = delay;
+    constructor(opions) {
+        Object.assign(this, {
+            twinkleClass: 'twinkle',
+            delay: 200
+        }, opions);
         this.timeoutId = null;
         this.focus = this.focus.bind(this);
     }

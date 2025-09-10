@@ -139,11 +139,11 @@ class SynonymCharacters {
 
 
 class AutoBackspace {
-    constructor({
-        delay = 200
-    }) {
-        this.timeoutId = null;     // Timer for delays
-        this.delay = delay;        // Delay for Backspace 
+    constructor(options) {
+        this.timeoutId = null;      // Timer for delays
+        Object.assign(this, {
+            delay: 200           // Delay for Backspace 
+        }, options);
         // bind the context
         this.backspace = this.backspace.bind(this);
         this.reset = this.reset.bind(this);
