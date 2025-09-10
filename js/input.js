@@ -1,50 +1,55 @@
-// click processing class
-class Input {
-    constructor(obj) {
-        var defaultObj = {
-            twinkleClass: 'twinkle',
-            onInput: event => {}     // the handler is triggered after each line change.
-        };
-        Object.assign(this, defaultObj, obj);
-
-        this.timeoutId = null;
-        this.inithandler();
+class TextInput {
+    constructor() {
+        this.update = this.update.bind(this);
     }
     
-    inithandler() {
-        document.addEventListener('keydown', (event) => {
-            // ctrl + backspace
-            if (event.ctrlKey && event.key === 'Backspace') {
-                const index = elements.value.textContent.lastIndexOf('\u00A0');
-                elements.value.textContent = elements.value.textContent.slice(0, Math.max(index, 0));
-            }
-            // backspace
-            else if (event.key === 'Backspace') elements.value.textContent = elements.value .textContent.slice(0, -1);
-            // if it's not a regular key then exit
-            else if (event.ctrlKey || event.altKey || event.metaKey || event.key.length !== 1) return;
-            // the whitespace
-            else if (event.key === ' ') elements.value.textContent += '\u00A0'; 
-            // adding symbol
-            else elements.value.textContent += event.key;
-            // focus on cursor 
-            this.focusCursor();
-            // this handler
-            this.onInput(event);
-        });
+    update(event) {
+        // ctrl + backspace
+        if (event.ctrlKey && event.key === 'Backspace') {
+            const index = elements.value.textContent.lastIndexOf('\u00A0');
+            elements.value.textContent = elements.value.textContent.slice(0, Math.max(index, 0));
+        }
+        // backspace
+        else if (event.key === 'Backspace') elements.value.textContent = elements.value.textContent.slice(0, -1);
+        // if it's not a regular key then exit
+        else if (event.ctrlKey || event.altKey || event.metaKey || event.key.length !== 1) return;
+        // the whitespace
+        else if (event.key === ' ') elements.value.textContent += '\u00A0'; 
+        // adding symbol
+        else elements.value.textContent += event.key;
+    }
+}
+
+class FocusCursor {
+    constructor(opions) {
+        Object.assign(this, {
+            twinkleClass: 'twinkle',
+            delay: 200
+        }, opions);
+        this.timeoutId = null;
+        this.focus = this.focus.bind(this);
     }
 
-    focusCursor() {
+    focus() {
         // removeing the twinkle class
         elements.cursor.classList.remove(this.twinkleClass);
-        // adding the twinkle class after 200ms
+        // adding the twinkle class after delay
         if (this.timeoutId) clearTimeout(this.timeoutId);
         this.timeoutId = setTimeout(()=> {
             elements.cursor.classList.add(this.twinkleClass);
             this.timeoutId = null;
-        }, 200 );
+        }, this.delay );
     }
 }
 
-const input = new Input({
-    onInput: upperText.update
+const focusCursor = new FocusCursor();
+const textInput = new TextInput();
+
+document.addEventListener('keydown', (event) => {
+    // focusing the cursor
+    focusCursor.focus(event);
+    // Updating text input
+    textInput.update(event);
+    // updating the input status
+    inputStatus.update(event);
 });

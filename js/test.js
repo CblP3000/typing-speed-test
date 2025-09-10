@@ -3,6 +3,7 @@ class Test {
         // console.log("result test 'GetText':", this.GetText());   
         // console.log("result test 'TextToLine':", this.TextToLine());
         // console.log("result test 'Statistics':", this.Statistics());
+        // this.testText();
     }
 
     TextToLine() {
@@ -60,6 +61,16 @@ class Test {
             const result = Number(elements.speedValue.textContent);
             resolve(result > 58 || result < 62)
         }, 2000));
+    }
+
+    testText() {
+        textPath.indexPath -= 2;
+        inputStatus.switchLine = ()=>{
+            inputStatus.line = "test"; 
+            inputStatus.reset(); 
+            //elements.value.textContent = "tes";
+        }
+        setTimeout(()=>inputStatus.switchLine(), 100)
     }
 }
 

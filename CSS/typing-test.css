@@ -1,0 +1,38 @@
+#typing-test {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#input-field {
+    margin-bottom: 0.2rem;
+    border-bottom: solid 2px var(--white-bg-color);
+}
+
+.element-TT {
+    display: flex;
+    min-width: 500px;
+}
+
+#input-cursor {
+    display: inline-block;
+    background: var(--color);
+    width: 1px;
+    height: 1.2rem;
+}
+
+.twinkle {
+    animation: twinkle 1s step-end infinite;
+}
+
+@keyframes twinkle {
+    50% { background: transparent;}
+}
+
+#entered-text {
+    color: var(--entered-text);
+}
+
+#erroneous-text {
+    color: var(--erroneous-text);
+}

@@ -1,0 +1,22 @@
+:root {
+    --color: #f0f0f0;
+    --gray-color: #c5c5c5; 
+    --entered-text: #888888;
+    --erroneous-text: #ff4444;
+    --white-bg-color: #464646;
+    --bg-color: #151515;
+    --panel-bg-color: #121212;
+    --dark-bg-color: #000000;
+
+    --OP-height: 100px;
+}
+
+body {
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg-color);
+    color: var(--color);
+    font-family: Arial, sans-serif;
+    display: flex;
+}

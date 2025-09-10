@@ -1,7 +1,9 @@
 // подбор и хронения текста.
 class GetText {
-    constructor({getPath}) {
-        this.getPath = getPath;
+    constructor(options) {
+        Object.assign(this, {
+            getPath: ()=>"getPath/is/not/defined"
+        }, options);
 
         this.texts = new Array(2);
         this.indexText = 0;
@@ -48,11 +50,9 @@ class TextPath {
     }
 
     get() {
-        this.indexPath =    
-            this.indexPath+1 <= packageOfTexts.getLength()?
-            this.indexPath+1 : 1;
+        this.indexPath = (this.indexPath + 1) % packageOfTexts.getLength();
         localStorage.setItem(this.key, this.indexPath);
-        return this.source + this.indexPath + ".txt";
+        return this.source + (this.indexPath + 1) + ".txt";
     }
 }
 
@@ -109,6 +109,6 @@ class TextToLine {
     }
 }
 
-const getPath = new TextPath();
-const getText = new GetText({getPath: getPath.get});
+const textPath = new TextPath();
+const getText = new GetText({getPath: textPath.get});
 const textToLine = new TextToLine({width: 500});
