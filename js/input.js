@@ -10,7 +10,7 @@ class TextInput {
             elements.value.textContent = elements.value.textContent.slice(0, Math.max(index, 0));
         }
         // backspace
-        else if (event.key === 'Backspace') elements.value.textContent = elements.value .textContent.slice(0, -1);
+        else if (event.key === 'Backspace') elements.value.textContent = elements.value.textContent.slice(0, -1);
         // if it's not a regular key then exit
         else if (event.ctrlKey || event.altKey || event.metaKey || event.key.length !== 1) return;
         // the whitespace
@@ -47,10 +47,10 @@ const focusCursor = new FocusCursor();
 const textInput = new TextInput();
 
 document.addEventListener('keydown', (event) => {
-    // focus on cursor
+    // focusing the cursor
     focusCursor.focus(event);
-    // text input update
+    // Updating text input
     textInput.update(event);
-    // Update input status
+    // updating the input status
     inputStatus.update(event);
 });
