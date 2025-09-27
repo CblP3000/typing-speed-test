@@ -23,7 +23,7 @@ const elements = {
 const packageOfTexts = {
     lang: 'ru',
     lengths: {
-        "en": 2,
+        "en": 76,
         "ru": 1815
     },
     
