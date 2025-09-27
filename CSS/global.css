@@ -4,9 +4,11 @@
     --entered-text: #888888;
     --erroneous-text: #ff4444;
     --white-bg-color: #464646;
-    --bg-color: #151515;
+    --bg-color: #191919;
     --panel-bg-color: #121212;
     --dark-bg-color: #000000;
+
+    --yellow-color: #c28400;
 
     --OP-height: 100px;
 }

@@ -16,22 +16,24 @@ const elements = {
     averageSpeedValue: $("#average-speed-value"),
     averageErrorValue: $("#average-errors-value"),
     spanElementForGetWidth: $("#span-element-for-get-width"),
+    languageSwitcher: $("#language-switcher-SP"),
+    selectLang: $("#selected-lang"),
 }
 
 const packageOfTexts = {
-    langs: ['en', 'ru'],
     lang: 'ru',
     lengths: {
-        "en": 0,
+        "en": 2,
         "ru": 1815
     },
     
-    setLang(index=0) {
-        if (index < 0 || index >= this.langs.length) {
-            console.warn('Incorrect language index');
-            return;
+    setLang(lang) {
+        if (this.lengths[lang]) {
+            this.lang = lang;
+            textPath.loadIndex();
+            getText.loadText();
+            switchLine.switchText();
         }
-        this.lang = this.langs[index];
     },
     getLang() {
         return this.lang;

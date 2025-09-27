@@ -9,6 +9,7 @@
             <link rel="stylesheet" href="CSS/output-panel.css">
             <link rel="stylesheet" href="CSS/typing-test.css">
             <link rel="stylesheet" href="CSS/other.css">
+            <link rel="stylesheet" href="CSS/settings-panel.css">
         </div>
     </head>
     <body class="container">
@@ -35,6 +36,20 @@
             </div>
         </div>
 
+        <div id="settings-panel">
+            <div id="language-switcher-SP" class="item-SP" title="switch the language">
+                <div id="selected-lang">russian</div>
+                <div id="open-list-indicator">
+                    <snap id="arrow-left-SP" class="arrow-SP"></snap>
+                    <snap id="arrow-right-SP" class="arrow-SP"></snap>
+                </div>
+                <div id="list-SP">
+                    <div value="en" class="list-item-SP">English</div>
+                    <div value="ru" class="list-item-SP">Russian</div>
+                </div>
+            </div>
+        </div>
+
         <div id="typing-test">
             <div id="input-field" class="element-TT">
                 <span id="input-value"></span>
@@ -55,6 +70,7 @@
             <script src="js/getText.js"></script>
             <script src="js/inputStatus.js"></script>
             <script src="js/input.js"></script>
+            <script src="js/settingsPanel.js"></script>
         <!----> <script src="js/test.js"></script> <!---->
         </div>
     </body>

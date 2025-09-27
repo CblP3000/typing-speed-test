@@ -78,7 +78,7 @@ class InputStatus {
 class SwitchLine {
     constructor(options) {
         Object.assign(this, {
-            getLine: ()=>["GetLine", "is not", "define"],
+            getLines: ()=>["GetLines", "is not", "define"],
             replaceSynonym: str=>str,
         }, options);
 
@@ -93,7 +93,7 @@ class SwitchLine {
     async switch() {
         // if end of text
         if (this.lines.length <= this.indexLine) {
-            this.lines = await this.getLine();
+            this.lines = await this.getLines();
             this.indexLine = 0;
         }
         // update row
@@ -109,6 +109,11 @@ class SwitchLine {
         inputStatus.reset();
         // switch the current row
         this.indexLine++;
+    }
+
+    async switchText() {
+        this.indexLine = this.lines.length;
+        await this.switch();
     }
 }
 
@@ -167,7 +172,7 @@ class AutoBackspace {
 
 const synonymCharacters = new SynonymCharacters();
 const switchLine = new SwitchLine({
-    getLine: ()=>getText.getText().then(textToLine.updateLines.bind(textToLine)),
+    getLines: ()=>getText.getText().then(textToLine.updateLines.bind(textToLine)),
     replaceSynonym: synonymCharacters.replace,
 });
 const autoBackspace = new AutoBackspace();
@@ -177,7 +182,10 @@ const inputStatus = new InputStatus({
     toSynonym: synonymCharacters.toSynonym,
     switchLine: switchLine.switch,
     autoBackspace: autoBackspace.backspace,
-    onStartTyping: statistics.start,
+    onStartTyping: ()=>{
+        statistics.start();
+        textPath.savingIndex();
+    },
     onError: statistics.error,
     onEndLine: statistics.endLine
 });
