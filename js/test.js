@@ -64,13 +64,15 @@ class Test {
     }
 
     testText() {
-        textPath.indexPath -= 2;
-        inputStatus.switchLine = ()=>{
+        const old = switchLine.switch;
+        switchLine.switch = async function() {
+            await old();
             inputStatus.line = "test"; 
-            inputStatus.reset(); 
+            inputStatus.update(); 
             //elements.value.textContent = "tes";
         }
-        setTimeout(()=>inputStatus.switchLine(), 100)
+        inputStatus.switchLine = switchLine.switch;
+        setTimeout(switchLine.switch, 100)
     }
 }
 

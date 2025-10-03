@@ -21,15 +21,17 @@ const elements = {
 }
 
 const packageOfTexts = {
-    lang: 'ru',
+    lang: "ru",
     lengths: {
         "en": 76,
         "ru": 1815
     },
+    keyLang: "language",
     
     setLang(lang) {
-        if (this.lengths[lang]) {
+        if (this.lang !== lang && this.lengths[lang]) {
             this.lang = lang;
+            localStorage.setItem(this.keyLang, this.lang)
             textPath.loadIndex();
             getText.loadText();
             switchLine.switchText();
@@ -40,5 +42,10 @@ const packageOfTexts = {
     },
     getLength() {
         return this.lengths[this.lang]
+    },
+    constructor() {
+        this.lang = localStorage.getItem(this.keyLang) || this.lang;
     }
 };
+
+packageOfTexts.constructor();

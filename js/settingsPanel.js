@@ -1,5 +1,9 @@
 class LanguageSwitcher {
     constructor() {
+        elements.selectLang.textContent = 
+            elements.languageSwitcher.querySelector(
+                `[value="${packageOfTexts.lang}"]`
+            ).textContent;
         this.initHandler();
     }
 
