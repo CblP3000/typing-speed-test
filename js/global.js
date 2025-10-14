@@ -18,6 +18,8 @@ const elements = {
     spanElementForGetWidth: $("#span-element-for-get-width"),
     languageSwitcher: $("#language-switcher-SP"),
     selectLang: $("#selected-lang"),
+    notifications: $("#container-notifications"),
+    exampleNotification: $(".notification-ntf")
 }
 
 const packageOfTexts = {

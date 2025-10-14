@@ -1,9 +1,10 @@
 class Test {
     constructor() {
-        // console.log("result test 'GetText':", this.GetText());   
+        // console.log("result test 'GetText':", this.GetText());       
         // console.log("result test 'TextToLine':", this.TextToLine());
         // console.log("result test 'Statistics':", this.Statistics());
         // this.testText();
+        // this.Notifications()
     }
 
     TextToLine() {
@@ -73,6 +74,16 @@ class Test {
         }
         inputStatus.switchLine = switchLine.switch;
         setTimeout(switchLine.switch, 100)
+    }
+
+    Notifications() {
+        const theClass = new Notifications();
+        let i = 0;
+        const interval = setInterval(()=>{
+            theClass.new(i+1+". massange")
+            i++;
+            if (i >= 10) clearInterval(interval);
+        }, 100);
     }
 }
 

@@ -9,8 +9,9 @@
     --dark-bg-color: #000000;
 
     --yellow-color: #c28400;
+    --red-color: #c40000;
 
-    --OP-height: 100px;
+    --animation-delay: 400ms;
 }
 
 body {
@@ -21,4 +22,14 @@ body {
     color: var(--color);
     font-family: Arial, sans-serif;
     display: flex;
+}
+
+.panel {
+    border: 2px solid var(--dark-bg-color);
+    border-radius: 10px;
+    background-color: var(--panel-bg-color);
+}
+
+.fade-out {
+    opacity: 0;
 }
