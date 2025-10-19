@@ -73,6 +73,8 @@ class TextToLine {
         Object.assign(this, {
             width: 200,
         }, options);
+        this.updateLines = this.updateLines.bind(this);
+        this.wrap = this.wrap.bind(this);
     }
 
     updateLines(text) { 

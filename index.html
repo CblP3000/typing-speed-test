@@ -39,14 +39,15 @@
 
         <div id="settings-panel">
             <div id="language-switcher-SP" class="item-SP panel" title="switch the language">
-                <div id="selected-lang">russian</div>
+                <div id="selected-lang">Russian</div>
                 <div id="open-list-indicator">
                     <snap id="arrow-left-SP" class="arrow-SP"></snap>
                     <snap id="arrow-right-SP" class="arrow-SP"></snap>
                 </div>
                 <div id="list-SP">
-                    <div value="en" class="list-item-SP">English</div>
-                    <div value="ru" class="list-item-SP">Russian</div>
+                    <div value="en" class="list-item-SP lang-SP">English</div>
+                    <div value="ru" class="list-item-SP lang-SP">Russian</div>
+                    <div value="uff" class="list-item-SP uff-SP">Upload from file</div>
                 </div>
             </div>
         </div>
@@ -71,15 +72,18 @@
             </div>
         </div>
 
-        <span id="span-element-for-get-width"></span>
+        <div>
+            <span id="span-element-for-get-width" class="hidden"></span>
+            <input type="file" accept=".txt" id="input-element-for-upload-file" class="hidden">
+        </div>
         <div>
             <script src="js/global.js"></script>
             <script src="js/notification.js"></script>
+            <script src="js/settingsPanel.js"></script>
             <script src="js/statistics.js"></script>
             <script src="js/getText.js"></script>
             <script src="js/inputStatus.js"></script>
             <script src="js/input.js"></script>
-            <script src="js/settingsPanel.js"></script>
         <!----> <script src="js/test.js"></script> <!---->
         </div>
     </body>

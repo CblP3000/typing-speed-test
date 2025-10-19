@@ -19,7 +19,8 @@ const elements = {
     languageSwitcher: $("#language-switcher-SP"),
     selectLang: $("#selected-lang"),
     notifications: $("#container-notifications"),
-    exampleNotification: $(".notification-ntf")
+    exampleNotification: $(".notification-ntf"),
+    uploadedFiles: $("#input-element-for-upload-file"),
 }
 
 const packageOfTexts = {
