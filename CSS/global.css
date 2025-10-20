@@ -4,11 +4,14 @@
     --entered-text: #888888;
     --erroneous-text: #ff4444;
     --white-bg-color: #464646;
-    --bg-color: #151515;
+    --bg-color: #191919;
     --panel-bg-color: #121212;
     --dark-bg-color: #000000;
 
-    --OP-height: 100px;
+    --yellow-color: #c28400;
+    --red-color: #c40000;
+
+    --animation-delay: 400ms;
 }
 
 body {
@@ -19,4 +22,14 @@ body {
     color: var(--color);
     font-family: Arial, sans-serif;
     display: flex;
+}
+
+.panel {
+    border: 2px solid var(--dark-bg-color);
+    border-radius: 10px;
+    background-color: var(--panel-bg-color);
+}
+
+.fade-out {
+    opacity: 0;
 }

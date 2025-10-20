@@ -78,23 +78,28 @@ class InputStatus {
 class SwitchLine {
     constructor(options) {
         Object.assign(this, {
-            getLine: ()=>["GetLine", "is not", "define"],
+            getLines: ()=>["GetLines", "is not", "define"],
             replaceSynonym: str=>str,
+            onNewText: ()=>{},
+            visibleLine: 5,          // number of Visible line
         }, options);
 
         this.lines = new Array();       // Array of row
         this.indexLine = 0;             // index of the current row
-        this.numberOfVisibleLine = 5;   // number of Visible line
+        this.oldLines = null;
 
         this.switch = this.switch.bind(this);  // bind the context
+        this.uploadText = this.uploadText.bind(this);
     }
 
     // switch the line
     async switch() {
         // if end of text
-        if (this.lines.length <= this.indexLine) {
-            this.lines = await this.getLine();
+        if (this.lines.length <= this.indexLine) { 
+            this.lines = this.oldLines || await this.getLines();
             this.indexLine = 0;
+            this.oldLines = null;
+            this.onNewText();
         }
         // update row
         inputStatus.line = this.replaceSynonym(this.lines[this.indexLine]); // update one line
@@ -102,13 +107,25 @@ class SwitchLine {
         // if there are more lines
         if (this.lines.length > this.indexLine + 1) { 
             elements.rest.innerHTML = this.lines
-                .slice(this.indexLine + 1, this.indexLine + this.numberOfVisibleLine)
+                .slice(this.indexLine + 1, this.indexLine + this.visibleLine)
                 .join("<br>");
         } else elements.rest.innerHTML = ``;
         // reset text area
         inputStatus.reset();
         // switch the current row
         this.indexLine++;
+    }
+
+    async switchText() {
+        this.indexLine = this.lines.length;
+        await this.switch();
+    }
+
+    async uploadText(lines) {
+        this.oldLines = [...this.lines];
+        this.lines = [...lines];
+        this.indexLine = 0;
+        await this.switch();
     }
 }
 
@@ -167,8 +184,12 @@ class AutoBackspace {
 
 const synonymCharacters = new SynonymCharacters();
 const switchLine = new SwitchLine({
-    getLine: ()=>getText.getText().then(textToLine.updateLines.bind(textToLine)),
+    getLines: ()=>
+        getText.getText()
+        .then(textToLine.updateLines)
+        .catch(console.error),
     replaceSynonym: synonymCharacters.replace,
+    onNewText: languageSwitcher.updateName,
 });
 const autoBackspace = new AutoBackspace();
 
@@ -177,7 +198,11 @@ const inputStatus = new InputStatus({
     toSynonym: synonymCharacters.toSynonym,
     switchLine: switchLine.switch,
     autoBackspace: autoBackspace.backspace,
-    onStartTyping: statistics.start,
+    onStartTyping: ()=>{
+        statistics.start();
+        if (!switchLine.oldLines) 
+            textPath.savingIndex();
+    },
     onError: statistics.error,
     onEndLine: statistics.endLine
 });

@@ -16,27 +16,39 @@ const elements = {
     averageSpeedValue: $("#average-speed-value"),
     averageErrorValue: $("#average-errors-value"),
     spanElementForGetWidth: $("#span-element-for-get-width"),
+    languageSwitcher: $("#language-switcher-SP"),
+    selectLang: $("#selected-lang"),
+    notifications: $("#container-notifications"),
+    exampleNotification: $(".notification-ntf"),
+    uploadedFiles: $("#input-element-for-upload-file"),
 }
 
 const packageOfTexts = {
-    langs: ['en', 'ru'],
-    lang: 'ru',
+    lang: "ru",
     lengths: {
-        "en": 0,
+        "en": 76,
         "ru": 1815
     },
+    keyLang: "language",
     
-    setLang(index=0) {
-        if (index < 0 || index >= this.langs.length) {
-            console.warn('Incorrect language index');
-            return;
+    setLang(lang) {
+        if (this.lang !== lang && this.lengths[lang]) {
+            this.lang = lang;
+            localStorage.setItem(this.keyLang, this.lang)
+            textPath.loadIndex();
+            getText.loadText();
+            switchLine.switchText();
         }
-        this.lang = this.langs[index];
     },
     getLang() {
         return this.lang;
     },
     getLength() {
         return this.lengths[this.lang]
+    },
+    constructor() {
+        this.lang = localStorage.getItem(this.keyLang) || this.lang;
     }
 };
+
+packageOfTexts.constructor();

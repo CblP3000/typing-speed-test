@@ -9,10 +9,12 @@
             <link rel="stylesheet" href="CSS/output-panel.css">
             <link rel="stylesheet" href="CSS/typing-test.css">
             <link rel="stylesheet" href="CSS/other.css">
+            <link rel="stylesheet" href="CSS/settings-panel.css">
+            <link rel="stylesheet" href="CSS/notification.css">
         </div>
     </head>
     <body class="container">
-        <div id="output-panel">
+        <div id="output-panel" class="panel">
             <img src="assets/speed_icon.opt.svg" alt=":(" class="icon-OP">
             <div class="container-OP">
                 <snap class="name-OP">speed:</snap>
@@ -35,6 +37,21 @@
             </div>
         </div>
 
+        <div id="settings-panel">
+            <div id="language-switcher-SP" class="item-SP panel" title="switch the language">
+                <div id="selected-lang">Russian</div>
+                <div id="open-list-indicator">
+                    <snap id="arrow-left-SP" class="arrow-SP"></snap>
+                    <snap id="arrow-right-SP" class="arrow-SP"></snap>
+                </div>
+                <div id="list-SP">
+                    <div value="en" class="list-item-SP lang-SP">English</div>
+                    <div value="ru" class="list-item-SP lang-SP">Russian</div>
+                    <div value="uff" class="list-item-SP uff-SP">Upload from file</div>
+                </div>
+            </div>
+        </div>
+
         <div id="typing-test">
             <div id="input-field" class="element-TT">
                 <span id="input-value"></span>
@@ -48,14 +65,26 @@
             <div id="rest-text" class="element-TT">please wait for the text to load, it usually happens pretty quickly.</div>
         </div>
 
-        <span id="span-element-for-get-width"></span>
+        <div id="container-notifications">
+            <div class="notification-ntf panel spawn-ntf " style="display: none">
+                <div class="close-ntf"></div>
+                <span class="message-ntf"></span>
+            </div>
+        </div>
+
+        <div>
+            <span id="span-element-for-get-width" class="hidden"></span>
+            <input type="file" accept=".txt" id="input-element-for-upload-file" class="hidden">
+        </div>
         <div>
             <script src="js/global.js"></script>
+            <script src="js/notification.js"></script>
+            <script src="js/settingsPanel.js"></script>
             <script src="js/statistics.js"></script>
             <script src="js/getText.js"></script>
             <script src="js/inputStatus.js"></script>
             <script src="js/input.js"></script>
-        <!----<script src="js/test.js"></script> <!---->
+        <!---- <script src="js/test.js"></script> !---->
         </div>
     </body>
 </html>

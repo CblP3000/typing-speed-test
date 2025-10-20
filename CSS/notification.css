@@ -1,0 +1,84 @@
+#container-notifications {
+    position: absolute;
+    bottom: 2%;
+    right: 2%;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+}
+
+.spawn-ntf {
+    animation: spawn-ntf var(--animation-delay) cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+}
+
+.fade-out-ntf {
+    animation: fade-out-ntf var(--animation-delay) ease-in 0s forwards; 
+}
+
+@keyframes spawn-ntf {
+    0% {
+        opacity: 0;
+        transform: translateY(40px) scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes fade-out-ntf {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-40px) scale(0.8);
+    }
+}
+
+.notification-ntf {
+    display: flex;
+    position: relative; 
+
+    width: 300px;
+    min-height: 40px;
+    padding: 5px 25px;
+    margin-top: 10px;
+
+    align-items: center;
+    justify-content: center;
+
+    transition: opacity var(--animation-delay) ease-in;
+}
+
+.close-ntf {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    width: 10px;
+    height: 10px;
+    cursor: pointer;
+}
+
+.close-ntf::after, .close-ntf::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+
+    width: 14px;
+    height: 2px;
+    border-radius: 2px;
+
+    background-color: var(--color);
+    transform: translate(-50%, -50%);
+}
+
+.close-ntf::before { transform: translate(-50%, -50%) rotate(45deg); }
+.close-ntf::after  { transform: translate(-50%, -50%) rotate(-45deg); }
+
+.close-ntf:hover::after, .close-ntf:hover::before {
+    background-color: var(--red-color);
+}

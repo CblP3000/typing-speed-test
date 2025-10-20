@@ -12,9 +12,9 @@ class GetText {
         // this.text = ()=> this.texts[this.indexText];
         // this.getText = url => fetch(url).then(e=>e.text(), console.error);
         
-        this.updateText(); // bind the context
-
-        this.getText = this.getText.bind(this)
+        this.loadText();
+        this.getText = this.getText.bind(this) // bind the context
+        this.loadText = this.loadText.bind(this);
     }
 
     async getText() {
@@ -22,12 +22,12 @@ class GetText {
         // saving the index of past saving
         const index = this.indexText;
         // saving the new text according to the new index
-        this.updateText();
+        this.loadText();
         // returning the previous text
         return this.texts[index];
     }
 
-    updateText = ()=> {
+    loadText() {
         this.promise = fetch(this.getPath())
         .then(e=>e.text()) // response to text
         .then(text => {
@@ -40,19 +40,26 @@ class GetText {
 
 class TextPath {
     constructor() {
-        this.key = "index_path";
-        this.indexPath = parseInt(
-            localStorage.getItem(this.key)
-        ) || 0;
-        this.source = `text/${packageOfTexts.getLang()}/`;
-
+        this.getKey = ()=>"index_path_" + packageOfTexts.getLang();
+        this.loadIndex();
         this.get = this.get.bind(this);
+        this.savingIndex = this.savingIndex.bind(this);
+        this.loadIndex = this.loadIndex.bind(this);
     }
 
     get() {
         this.indexPath = (this.indexPath + 1) % packageOfTexts.getLength();
-        localStorage.setItem(this.key, this.indexPath);
-        return this.source + (this.indexPath + 1) + ".txt";
+        return "text/" + packageOfTexts.lang + "/" + (this.indexPath + 1) + ".txt";
+    }
+
+    savingIndex() {
+        localStorage.setItem(this.getKey(), this.indexPath-1); // -1 because there is a preloaded text
+    }
+
+    loadIndex() {
+        this.indexPath = parseInt(
+            localStorage.getItem(this.getKey())
+        ) || 0;
     }
 }
 
@@ -66,6 +73,8 @@ class TextToLine {
         Object.assign(this, {
             width: 200,
         }, options);
+        this.updateLines = this.updateLines.bind(this);
+        this.wrap = this.wrap.bind(this);
     }
 
     updateLines(text) { 
