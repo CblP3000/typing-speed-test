@@ -1,75 +1,44 @@
-// saves and outputs statistics.
-class Statistics {
-    constructor() {
-        // intial value
-        this.errors = new AverageValue(10);
-        this.speeds = new AverageValue(10);
-
-        // bind the context 
-        this.start = this.start.bind(this);
-        this.error = this.error.bind(this);
-        this.endLine = this.endLine.bind(this);
-
-        this.reset();
+class StatisticsValue {
+    constructor(sizeOfHistory = 10, elementForValue, elementForAverageValue) {
+        this.maxIndex = sizeOfHistory;
+        this.element = elementForValue;
+        this.elementAverage = elementForAverageValue;
+        this.values = new Array();
+        this.amount = 0;
+        this.index = -1;
     }
 
-    start() {
-        this.reset();
-        this.startTime = performance.now(); 
+    add(value=0) {
+        // update average value
+        this.index = (this.index + 1) % this.maxIndex; 
+        this.amount -= this.values[this.index] ?? 0;
+        this.values[this.index] = value;   
+        this.amount += value;
+        // pring the value
+        this.element.textContent = value.toFixed(0);
+        this.elementAverage.textContent = (this.amount / this.values.length).toFixed(0);
     }
+}
 
+const statistics = {
+    speeds: new StatisticsValue(10, elements.speedValue, elements.averageSpeedValue),
+    errors: new StatisticsValue(10, elements.errorValue, elements.averageErrorValue),
+    startTime: null,
+    errorCount: 0,
+    // start typing
+    start() { 
+        this.errorCount = 0;
+        this.startTime = performance.now();
+    },
+    // if you made a mistake
     error() {
         this.errorCount++;
-    }
-
+    },
+    // if you added a line
     endLine(line) {
-        this.endTime = performance.now();
-        const difference = this.endTime - this.startTime;
-        this.add(line, this.errorCount, difference);
-    }
-
-    reset() {
-        this.errorCount = 0;
-        this.entered = 0;
-        this.startTime = null;
-        this.endTime = null;
-    }
-
-    // adding and updating statistics results.
-    // line - a string. error - the number of errors. time - writing time in ms.
-    add(line, error, time) { 
-        const speed = line.length / time * 60000;   // speed characters per minute
-        const errors = error / line.length * 100;   // percentage of errors
-        
-        this.speeds.push(speed);
-        this.errors.push(errors);
-
-        elements.speedValue.textContent = speed.toFixed(0);
-        elements.errorValue.textContent = errors.toFixed(0);   
-        
-        elements.averageSpeedValue.textContent = this.speeds.average().toFixed(0);
-        elements.averageErrorValue.textContent = this.errors.average().toFixed(0); 
-    }
+        if (!line) return;
+        const diff = Math.max(performance.now() - this.startTime, 1);
+        this.speeds.add(line.length / diff * 60000);
+        this.errors.add(this.errorCount / line.length * 100);
+    },
 }
-
-class AverageValue {
-    constructor(sizeOfHistory = 10) {
-        this.maxIndex = sizeOfHistory;
-        this.list = new Array();
-        this.amount = 0;
-        this.index = 0;
-    }
-
-    push(value=0) {
-        this.amount -= this.list[this.index] ?? 0;
-        this.amount += value;
-        this.list[this.index] = value;
-        this.index = (this.index + 1) % this.maxIndex; 
-    }
-
-    average() {
-        return (this.amount / this.list.length) || 0;
-    }
-}
-
-const statistics = new Statistics();

@@ -50,7 +50,7 @@ class Test {
     }
 
     async Statistics() {
-        const stats = new Statistics();
+        const stats = statistics;
         stats.start();           
         stats.error();           
         stats.error();           

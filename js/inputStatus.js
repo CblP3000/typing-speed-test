@@ -203,6 +203,6 @@ const inputStatus = new InputStatus({
         if (!switchLine.oldLines) 
             textPath.savingIndex();
     },
-    onError: statistics.error,
-    onEndLine: statistics.endLine
+    onError: statistics.error.bind(statistics),
+    onEndLine: statistics.endLine.bind(statistics)
 });
