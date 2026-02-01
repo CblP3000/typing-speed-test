@@ -62,6 +62,25 @@ class UploadFile {
     }
 }
 
+function initHandlerBtnImg(pathOn, pathOff, button, handler) {
+    button.addEventListener("click", (event) => {
+        const enabled = button.toggleAttribute("isEnabled");
+        button.src = enabled ? pathOn : pathOff;
+        handler && handler(event, button);
+    });
+}
+
+initHandlerBtnImg("assets/dark-mode-toggle-on.opt.svg", "assets/dark-mode-toggle-off.opt.svg", elements.themeSwitcher, 
+    (_, button)=>{
+        const whiteTheme = "theme-white";
+        const classList = document.body.classList;
+        if (button.hasAttribute("isEnabled"))
+            classList.remove(whiteTheme);
+        else {
+            classList.add(whiteTheme);
+        }
+    }
+);
 
 const languageSwitcher = new LanguageSwitcher();
 const uploadFile = new UploadFile();

@@ -14,6 +14,17 @@
     --animation-delay: 400ms;
 }
 
+.theme-white {
+    --color: #000000;
+    --gray-color: #363636; 
+    --entered-text: #575757;
+    --erroneous-text: #c40000;
+    --white-bg-color: #f1f1f1;
+    --bg-color: #ffffff;
+    --panel-bg-color: #ffffff;
+    --dark-bg-color: #242424;
+}
+
 body {
     margin: 0;
     width: 100vw;

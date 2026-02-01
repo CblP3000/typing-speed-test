@@ -21,6 +21,7 @@ const elements = {
     notifications: $("#container-notifications"),
     exampleNotification: $(".notification-ntf"),
     uploadedFiles: $("#input-element-for-upload-file"),
+    themeSwitcher: $("#theme-switcher"),
 }
 
 const packageOfTexts = {

@@ -1,14 +1,15 @@
 #settings-panel {
     display: flex;
-    position: absolute;
+    position: fixed;
     top: 2%;
     left: 2%;
+    justify-content: center;
 }
 
 .item-SP {
     height: 30px;
     width: 30px; 
-    margin: 5px;
+    margin: 10px;
 
     text-align: center;
     line-height: 30px;
@@ -16,37 +17,30 @@
 }
 
 #language-switcher-SP {
+    position: relative;
     width: 200px;
-
-    display: flex;
-    flex-direction: row;
     justify-content: center;
 
     box-shadow: 2px 2px var(--dark-bg-color);
 }
 
-#selected-lang {
-    display: flex;
-}
-
 #list-SP {
-    position: absolute;
-    margin-top: 40px;
+    position: relative;
+    top: 10px;
     width: 200px;
     border-radius: 10px;
-
     
     overflow-y: auto;
     scrollbar-color: var(--yellow-color) var(--white-bg-color);
     scrollbar-width: thin;
 
-
-    transition: max-height 200ms ease-out;   
+    transition: max-height 200ms ease-out;  
     max-height: 0;
 }
 
 [isEnabled] #list-SP {
     max-height: 80vh;
+    border: 2px solid var(--dark-bg-color);
 }
 
 
@@ -85,3 +79,8 @@
 #arrow-right-SP { transform: rotate(35deg) translateX(2px); }
 [isEnabled] #arrow-left-SP::after { transform: rotate(70deg); }
 [isEnabled] #arrow-right-SP::after { transform: rotate(-70deg); }
+
+
+.button-SP {
+    width: auto;
+}
