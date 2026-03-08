@@ -70,7 +70,8 @@ function initHandlerBtnImg(pathOn, pathOff, button, handler) {
     });
 }
 
-initHandlerBtnImg("assets/dark-mode-toggle-on.opt.svg", "assets/dark-mode-toggle-off.opt.svg", elements.themeSwitcher, 
+initHandlerBtnImg(
+    "assets/dark-mode-toggle-on.opt.svg", "assets/dark-mode-toggle-off.opt.svg", elements.themeSwitcher, 
     (_, button)=>{
         const whiteTheme = "theme-white";
         const classList = document.body.classList;
@@ -80,6 +81,11 @@ initHandlerBtnImg("assets/dark-mode-toggle-on.opt.svg", "assets/dark-mode-toggle
             classList.add(whiteTheme);
         }
     }
+);
+
+initHandlerBtnImg(
+    "assets/dark-mode-toggle-on.opt.svg", "assets/dark-mode-toggle-off.opt.svg", elements.autoBackspace, 
+    ()=> settings.isAutoBackspace = !settings.isAutoBackspace
 );
 
 const languageSwitcher = new LanguageSwitcher();

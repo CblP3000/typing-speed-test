@@ -22,6 +22,7 @@ const elements = {
     exampleNotification: $(".notification-ntf"),
     uploadedFiles: $("#input-element-for-upload-file"),
     themeSwitcher: $("#theme-switcher"),
+    autoBackspace: $('#auto-backspace'),
 }
 
 const packageOfTexts = {
