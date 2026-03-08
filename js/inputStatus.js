@@ -103,13 +103,15 @@ class SwitchLine {
         }
         // update row
         inputStatus.line = this.replaceSynonym(this.lines[this.indexLine]); // update one line
-
-        // if there are more lines
-        if (this.lines.length > this.indexLine + 1) { 
-            elements.rest.innerHTML = this.lines
-                .slice(this.indexLine + 1, this.indexLine + this.visibleLine)
-                .join("<br>");
-        } else elements.rest.innerHTML = ``;
+        // print rest lines
+        elements.rest.innerHTML = '';
+        for (let i = this.indexLine + 1; 
+            this.visibleLine + this.indexLine > i && this.lines.length > i; 
+            i++) {
+            const el = document.createElement('span');
+            el.textContent = this.lines[i];
+            elements.rest.append(el);
+        }
         // reset text area
         inputStatus.reset();
         // switch the current row

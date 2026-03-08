@@ -36,3 +36,7 @@
 #erroneous-text {
     color: var(--erroneous-text);
 }
+
+#rest-text {
+    flex-direction: column;
+}
